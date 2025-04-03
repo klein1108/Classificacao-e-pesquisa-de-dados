@@ -75,9 +75,9 @@ void shell_sort(int arr[], int n, int arrTipo[]){
 
 
 void randomize_array(int arrPot2[], int arrTresMaisUM[], int arrCiura[], int arrSize){
- // Gera os números aleatórios
+ // Gera os nÃºmeros aleatÃ³rios
     for (int i = 0; i < arrSize; i++) {
-        int num = rand() % 100; // Números entre 0 e 99
+        int num = rand() % 100; // NÃºmeros entre 0 e 99
         arrPot2[i] = num;
         arrTresMaisUM[i] = num;
         arrCiura[i] = num;

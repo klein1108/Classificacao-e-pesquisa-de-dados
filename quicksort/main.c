@@ -1,168 +1,214 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAY_SIZE 10
-#define MAX_RANDOM_VAL 50
+#define TAM_ARRAY 1000000
+
+#define MEDIANA 0
+#define RANDOM 1
 
 #define HOARE 0
-#define LOMOTO 1
+#define LOMUTO 1
 
-
-void quicksort_random(int vet[], int posInicial, int posFinal, int* contaTrocas, int TIPO_PARTICAO){
-    int r, p, aux;
-    if(posFinal > posInicial){
-        r = posInicial + rand() % (posFinal - posInicial + 1);
-
-        aux = vet[posInicial];
-        vet[posInicial] = vet[r];
-        vet[r] = aux;
-        *contaTrocas = *contaTrocas + 1;
-        printf("TROCOU -> troca = %d\t", *contaTrocas);
-        print_array(vet, ARRAY_SIZE);
-
-
-        p = particiona_lomuto(vet, posInicial, posFinal, contaTrocas);
-        quicksort(vet, posInicial, p-1, contaTrocas, TIPO_PARTICAO);
-        quicksort(vet, p+1, posFinal, contaTrocas, TIPO_PARTICAO);
-
-    }
-}
-
-void quicksort(int vet[], int posInicial, int posFinal, int* contaTrocas, int TIPO_PARTICAO){
-    int pivo;
-    if(posFinal > posInicial){
-        if(TIPO_PARTICAO == HOARE){
-            pivo = particiona_hoare(vet, posInicial, posFinal, contaTrocas);
-        } else {
-            pivo = particiona_lomuto(vet, posInicial, posFinal, contaTrocas);
-        }
-        quicksort(vet, posInicial, pivo-1, contaTrocas, TIPO_PARTICAO);
-        quicksort(vet, pivo+1, posFinal, contaTrocas, TIPO_PARTICAO);
-
-    }
-}
-
-int particiona_lomuto(int vet[], int esq, int dir, int* contaTrocas){
-    int chave = vet[esq];
-    int storeIndex = esq + 1;
-    int aux;
-
-    for(int i = esq + 1; i <= dir; i++){
-        if(vet[i] < chave){
-            //swap 1
-            aux = vet[i];
-            vet[i] = vet[storeIndex];
-            vet[storeIndex] = aux;
-            storeIndex++;
-
-            *contaTrocas = *contaTrocas + 1;
-            printf("TROCOU 1-> troca = %d\t", *contaTrocas);
-            print_array(vet, ARRAY_SIZE);
-
-        }
-    }
-    //swap 2
-    aux = vet[esq];
-    vet[esq] = vet[storeIndex-1];
-    vet[storeIndex-1] = aux;
-
-    *contaTrocas = *contaTrocas + 1;
-    printf("TROCOU 2-> troca = %d\t", *contaTrocas);
-    print_array(vet, ARRAY_SIZE);
-    return (storeIndex-1);
-
-}
-int particiona_hoare(int vet[], int esq, int dir, int* contaTrocas){
-    int chave, i, j, aux;
-    chave = vet[esq];
-    i = esq;
-    j = dir+1;
-
-    while(1){
-        while(vet[++i] <= chave) if (i == dir) break;
-        while(chave < vet[--j]) if (j == esq) break;
-        if(i >= j) break;
-        aux = vet[i];
-        vet[i] = vet[j];
-        vet[j] = aux;
-
-        *contaTrocas = *contaTrocas + 1;
-        printf("TROCOU 3 -> troca = %d\t", *contaTrocas);
-        print_array(vet, ARRAY_SIZE);
-    }
-        aux = vet[esq];
-        vet[esq] = vet[j];
-        vet[j] = aux;
-        *contaTrocas = *contaTrocas + 1;
-        printf("TROCOU 4 -> troca = %d\t", *contaTrocas);
-        print_array(vet, ARRAY_SIZE);
-    return j;
-}
-
-
-// Function to print an array
-void print_array(int arr[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
+void quicksort(int c[], int i, int f, int* troca, int* rec, int tipo, int part);
+int mediana_de_3(int c[], int x, int y, int z);
+int particao_lomuto(int C[], int left, int right, int* trocas);
+int particao_hoare(int C[], int left, int right, int* trocas);
 
 
 
-void randomize_array(int vetLomotoDefault[], int vetLomotoRandom[], int vetLomotoAvarage[],
-                     int vetHoareDefault[], int vetHoareRandom[], int vetHoareAvarage[]){
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        int num = rand() % MAX_RANDOM_VAL + 1; // Numero aleatorio entre 0 até MAX_RANDOM_VAL
-        vetLomotoDefault[i] = num;
-        vetLomotoRandom[i] = num;
-        vetLomotoAvarage[i] = num;
+int main() {
 
-        vetHoareDefault[i] = num;
-        vetHoareRandom[i] = num;
-        vetHoareAvarage[i] = num;
-    }
-
-}
-
-int main(){
     srand(time(NULL));
-    //Lomoto
-    int vetLomotoDefault[ARRAY_SIZE];
-    int vetLomotoRandom[ARRAY_SIZE];
-    int vetLomotoAvarage[ARRAY_SIZE];
 
-    //Hoare
-    int vetHoareDefault[ARRAY_SIZE];
-    int vetHoareRandom[ARRAY_SIZE];
-    int vetHoareAvarage[ARRAY_SIZE];
+    clock_t start, end;
+    double cpu_time_used;
 
-    randomize_array(vetLomotoDefault, vetLomotoRandom, vetLomotoAvarage,
-                     vetHoareDefault, vetHoareRandom, vetHoareAvarage);
+    int *vetorRandomLomuto = (int *)malloc(TAM_ARRAY * sizeof(int));
+    int *vetorRandomHoare = (int *)malloc(TAM_ARRAY * sizeof(int));
+    int *vetorMedianaLomuto = (int *)malloc(TAM_ARRAY * sizeof(int));
+    int *vetorMedianaHoare = (int *)malloc(TAM_ARRAY * sizeof(int));
 
-    int contaTrocas = 0;
+    int troca=0, rec = 0;
 
-    printf("LOMOTO PADRAO:\n");
+    for ( int i = 0 ; i < TAM_ARRAY ; i++)
+    {
+        int num = rand() % TAM_ARRAY;
+        vetorRandomLomuto[i] =  num;
+        vetorRandomHoare[i] = num;
+        vetorMedianaLomuto[i] = num;
+        vetorMedianaHoare[i] = num;
+    }
 
-    print_array(vetLomotoDefault, ARRAY_SIZE);
-    quicksort(vetLomotoDefault, 0, ARRAY_SIZE-1, &contaTrocas, LOMOTO);
-    print_array(vetLomotoDefault, ARRAY_SIZE);
+
+    printf("QuickSort Random Lomuto: \n");
+    start = clock();
+
+    quicksort(vetorRandomLomuto, 0, TAM_ARRAY - 1, &troca, &rec, RANDOM, LOMUTO);
+
+    end = clock();
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Tempo: %f segundos\n", cpu_time_used);
+    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
+
+    troca = 0;
+    rec = 0;
 
 
-    printf("\nLOMOTO RANDOMICO:\n");
 
-    contaTrocas = 0;
-    print_array(vetLomotoRandom, ARRAY_SIZE);
-    quicksort_random(vetLomotoRandom, 0, ARRAY_SIZE-1, &contaTrocas, LOMOTO);
-    print_array(vetLomotoRandom, ARRAY_SIZE);
 
-    printf("\nHOARE DEFAULT:\n");
+    printf("QuickSort Random Hoare: \n");
+    start = clock();
 
-    contaTrocas = 0;
-    print_array(vetHoareDefault, ARRAY_SIZE);
-    quicksort_random(vetHoareDefault, 0, ARRAY_SIZE-1, &contaTrocas, HOARE);
-    print_array(vetHoareDefault, ARRAY_SIZE);
+    quicksort(vetorRandomHoare, 0, TAM_ARRAY - 1, &troca, &rec, RANDOM, HOARE);
+
+    end = clock();
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Tempo: %f segundos\n", cpu_time_used);
+    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
+
+    troca = 0;
+    rec = 0;
+
+
+
+
+    printf("QuickSort Mediana Lomuto: \n");
+
+    start = clock(); // Start time
+    quicksort(vetorMedianaLomuto, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, LOMUTO);
+    end = clock(); // End time
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Tempo: %f segundos\n", cpu_time_used);
+    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
+
+    troca = 0;
+    rec = 0;
+
+
+
+
+    printf("QuickSort Mediana Hoare: \n");
+    start = clock();
+
+    quicksort(vetorMedianaHoare, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, HOARE);
+
+    end = clock(); // End time
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Tempo: %f segundos\n", cpu_time_used);
+    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
+
+    troca = 0;
+    rec = 0;
+
+
+    free(vetorRandomLomuto);
+    free(vetorRandomHoare);
+    free(vetorMedianaLomuto);
+    free(vetorMedianaHoare);
 
     return 0;
 }
+
+int particao_lomuto(int vet[], int esq, int dir, int* contaTrocas){
+    int chave = vet[esq];
+    int storeindex = esq + 1;  // Index of smaller element
+    int aux;
+
+    for (int i = esq+1; i <= dir; i++){
+        if (vet[i] < chave){
+
+            aux = vet[i];
+            vet[i] = vet[storeindex];
+            vet[storeindex] = aux;
+
+            (*contaTrocas)++;
+            storeindex++;    // increment index of smaller element
+        }
+    }
+
+    aux = vet[esq];
+    vet[esq] = vet[storeindex-1];
+    vet[storeindex-1] = aux;
+
+    (*contaTrocas)++;
+
+    return (storeindex-1);
+}
+
+int particao_hoare(int vet[], int esq, int dir, int* contaTrocas){
+    int chave, i, j;
+    chave = vet[esq]; i = esq; j = dir;
+
+    while (i<j) {
+        while(vet[j] > chave && i < j) j--;
+        vet[i] = vet[j];
+        (*contaTrocas)++;
+        while(vet[i] <= chave && i < j) i++ ;
+        vet[j] = vet[i];
+        (*contaTrocas)++;
+    }
+    vet[j] = chave;
+    return i;
+}
+
+int mediana_de_3(int vet[], int x, int y, int z){
+    if ((vet[y] >= vet[x] && vet[y] <= vet[z]) || (vet[y] >= vet[z] && vet[y] <= vet[x])) {
+        return y;
+    }
+    else if ((vet[x] >= vet[y] && vet[x] <= vet[z]) || (vet[x] >= vet[z] && vet[x] <= vet[y])) {
+        return x;
+    }
+    else {
+        return z;
+    }
+
+}
+
+void quicksort(int vet[], int posInicial, int posFinal, int* contaTrocas, int* contaRecursao, int TIPO, int PARTICAO){
+
+    if(posFinal > posInicial){
+        int p, r, aux;
+
+        switch(TIPO){
+            case MEDIANA:
+
+                int meio = (posInicial + posFinal)/2;
+                r =  mediana_de_3(vet, meio, posInicial, posFinal);
+
+                aux = vet[posInicial];
+                vet[posInicial] = vet[r];
+                vet[r] = aux;
+
+            break;
+
+            case RANDOM:
+                r = (rand() % (posFinal - posInicial + 1)) + posInicial;
+
+                aux = vet[posInicial];
+                vet[posInicial] = vet[r];
+                vet[r] = aux;
+            break;
+        }
+
+        switch(PARTICAO){
+            case HOARE:
+                p = particao_hoare(vet, posInicial, posFinal, contaTrocas);
+            break;
+            case LOMUTO:
+                p = particao_lomuto(vet, posInicial, posFinal, contaTrocas);
+            break;
+
+        }
+
+        (*contaRecursao)++;
+        quicksort(vet, posInicial, p-1, contaTrocas, contaRecursao, TIPO, PARTICAO);
+        (*contaRecursao)++;
+        quicksort(vet, p+1, posFinal, contaTrocas, contaRecursao, TIPO, PARTICAO);
+    }
+}
+
