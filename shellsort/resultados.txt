@@ -1,0 +1,21 @@
+Resultados LAB 01 Classificação e Pesquisa de Dados
+
+Nome: Lucas Rossi Klein
+Cartão: 586981
+
+Para um array de 100.000 valores:
+
+Potência de 2:
+H = 65536
+Tempo de Execução: 0.055000 segundos
+Movimentações: 7901247
+
+3N + 1:
+H = 88573
+Tempo de Execução: 0.020000 segundos
+Movimentações: 1170160
+
+Sequência de Ciura:
+H = 90927
+Tempo de Execução: 0.022000 segundos (achei meio estranho)
+Movimentações: 558992
