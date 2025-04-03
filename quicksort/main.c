@@ -77,9 +77,9 @@ int main() {
 
     printf("QuickSort Mediana Lomuto: \n");
 
-    start = clock(); // Start time
+    start = clock();
     quicksort(vetorMedianaLomuto, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, LOMUTO);
-    end = clock(); // End time
+    end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 
     printf("Tempo: %f segundos\n", cpu_time_used);
@@ -96,7 +96,7 @@ int main() {
 
     quicksort(vetorMedianaHoare, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, HOARE);
 
-    end = clock(); // End time
+    end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 
     printf("Tempo: %f segundos\n", cpu_time_used);
@@ -116,7 +116,7 @@ int main() {
 
 int particao_lomuto(int vet[], int esq, int dir, int* contaTrocas){
     int chave = vet[esq];
-    int storeindex = esq + 1;  // Index of smaller element
+    int storeindex = esq + 1;
     int aux;
 
     for (int i = esq+1; i <= dir; i++){
@@ -127,7 +127,7 @@ int particao_lomuto(int vet[], int esq, int dir, int* contaTrocas){
             vet[storeindex] = aux;
 
             (*contaTrocas)++;
-            storeindex++;    // increment index of smaller element
+            storeindex++;
         }
     }
 
