@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAM_ARRAY 1000000
+#define TRUE 1
+#define FALSE 0
+
+#define MAX_INDEX 5
 
 #define MEDIANA 0
 #define RANDOM 1
@@ -21,98 +24,105 @@ int main() {
 
     srand(time(NULL));
 
+    int size[MAX_INDEX] = {100, 1000, 10000, 100000, 1000000};
     clock_t start, end;
     double cpu_time_used;
+    char nomeArquivo[] = "resultados.csv";
 
-    int *vetorRandomLomuto = (int *)malloc(TAM_ARRAY * sizeof(int));
-    int *vetorRandomHoare = (int *)malloc(TAM_ARRAY * sizeof(int));
-    int *vetorMedianaLomuto = (int *)malloc(TAM_ARRAY * sizeof(int));
-    int *vetorMedianaHoare = (int *)malloc(TAM_ARRAY * sizeof(int));
+    FILE* arquivo = fopen(nomeArquivo, "w");
 
-    int troca=0, rec = 0;
+    if (arquivo == NULL) {
+        printf("Erro ao criar arquivo CSV.\n");
+        return 1;
 
-    for ( int i = 0 ; i < TAM_ARRAY ; i++)
-    {
-        int num = rand() % TAM_ARRAY;
-        vetorRandomLomuto[i] =  num;
-        vetorRandomHoare[i] = num;
-        vetorMedianaLomuto[i] = num;
-        vetorMedianaHoare[i] = num;
+    } else {
+        for(int index = 0; index < MAX_INDEX; index++){
+            int *vetorRandomLomuto = (int *)malloc(size[index] * sizeof(int));
+            int *vetorRandomHoare = (int *)malloc(size[index] * sizeof(int));
+            int *vetorMedianaLomuto = (int *)malloc(size[index] * sizeof(int));
+            int *vetorMedianaHoare = (int *)malloc(size[index] * sizeof(int));
+
+            int troca=0, rec = 0;
+
+
+            for ( int i = 0 ; i < size[index] ; i++){
+                int num = rand() % size[index];
+                vetorRandomLomuto[i] =  num;
+                vetorRandomHoare[i] = num;
+                vetorMedianaLomuto[i] = num;
+                vetorMedianaHoare[i] = num;
+            }
+
+
+            start = clock();
+
+            quicksort(vetorRandomLomuto, 0, size[index] - 1, &troca, &rec, RANDOM, LOMUTO);
+
+            end = clock();
+            cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+            fprintf(arquivo, "QuickSort Random Lomuto - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            printf("QuickSort Random Lomuto - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            troca = 0;
+            rec = 0;
+
+
+
+
+            start = clock();
+            quicksort(vetorMedianaLomuto, 0, size[index] - 1, &troca, &rec, MEDIANA, LOMUTO);
+            end = clock();
+            cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+            fprintf(arquivo, "QuickSort Mediana Lomuto - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            printf("QuickSort Mediana Lomuto - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            troca = 0;
+            rec = 0;
+
+
+
+
+            start = clock();
+
+            quicksort(vetorRandomHoare, 0, size[index] - 1, &troca, &rec, RANDOM, HOARE);
+
+            end = clock();
+            cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+            fprintf(arquivo, "QuickSort Random Hoare - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            printf("QuickSort Random Hoare - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n", size[index], cpu_time_used, troca, rec);
+            troca = 0;
+            rec = 0;
+
+
+
+
+            start = clock();
+
+            quicksort(vetorMedianaHoare, 0, size[index] - 1, &troca, &rec, MEDIANA, HOARE);
+
+            end = clock();
+            cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+            fprintf(arquivo, "QuickSort Mediana Hoare - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n\n", size[index], cpu_time_used, troca, rec);
+            printf("QuickSort Mediana Hoare - Elementos: %d - Tempo: %.10f segundos - Trocas: %d - Recursoes: %d\n\n", size[index], cpu_time_used, troca, rec);
+            troca = 0;
+            rec = 0;
+
+            free(vetorRandomLomuto);
+            free(vetorRandomHoare);
+            free(vetorMedianaLomuto);
+            free(vetorMedianaHoare);
+        }
+
+        fclose(arquivo);
+        printf("Resultados exportados para %s com sucesso.\n", nomeArquivo);
     }
 
 
-    printf("QuickSort Random Lomuto: \n");
-    start = clock();
-
-    quicksort(vetorRandomLomuto, 0, TAM_ARRAY - 1, &troca, &rec, RANDOM, LOMUTO);
-
-    end = clock();
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-    printf("Tempo: %f segundos\n", cpu_time_used);
-    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
-
-    troca = 0;
-    rec = 0;
-
-
-
-
-    printf("QuickSort Random Hoare: \n");
-    start = clock();
-
-    quicksort(vetorRandomHoare, 0, TAM_ARRAY - 1, &troca, &rec, RANDOM, HOARE);
-
-    end = clock();
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-    printf("Tempo: %f segundos\n", cpu_time_used);
-    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
-
-    troca = 0;
-    rec = 0;
-
-
-
-
-    printf("QuickSort Mediana Lomuto: \n");
-
-    start = clock();
-    quicksort(vetorMedianaLomuto, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, LOMUTO);
-    end = clock();
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-    printf("Tempo: %f segundos\n", cpu_time_used);
-    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
-
-    troca = 0;
-    rec = 0;
-
-
-
-
-    printf("QuickSort Mediana Hoare: \n");
-    start = clock();
-
-    quicksort(vetorMedianaHoare, 0, TAM_ARRAY - 1, &troca, &rec, MEDIANA, HOARE);
-
-    end = clock();
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-    printf("Tempo: %f segundos\n", cpu_time_used);
-    printf("Com %d trocas e %d recurcoes\n\n", troca, rec);
-
-    troca = 0;
-    rec = 0;
-
-
-    free(vetorRandomLomuto);
-    free(vetorRandomHoare);
-    free(vetorMedianaLomuto);
-    free(vetorMedianaHoare);
-
     return 0;
 }
+
 
 int particao_lomuto(int vet[], int esq, int dir, int* contaTrocas){
     int chave = vet[esq];
@@ -172,12 +182,11 @@ int mediana_de_3(int vet[], int x, int y, int z){
 void quicksort(int vet[], int posInicial, int posFinal, int* contaTrocas, int* contaRecursao, int TIPO, int PARTICAO){
 
     if(posFinal > posInicial){
-        int p, r, aux;
+        int p, r, aux, meio;
 
         switch(TIPO){
             case MEDIANA:
-
-                int meio = (posInicial + posFinal)/2;
+                meio = (posInicial + posFinal)/2;
                 r =  mediana_de_3(vet, meio, posInicial, posFinal);
 
                 aux = vet[posInicial];

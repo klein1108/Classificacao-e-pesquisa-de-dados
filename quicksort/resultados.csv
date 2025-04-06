@@ -1,0 +1,25 @@
+QuickSort Random Lomuto - Elementos: 100 - Tempo: 0.0000080000 segundos - Trocas: 315 - Recursoes: 134
+QuickSort Mediana Lomuto - Elementos: 100 - Tempo: 0.0000080000 segundos - Trocas: 414 - Recursoes: 124
+QuickSort Random Hoare - Elementos: 100 - Tempo: 0.0000100000 segundos - Trocas: 322 - Recursoes: 132
+QuickSort Mediana Hoare - Elementos: 100 - Tempo: 0.0000090000 segundos - Trocas: 320 - Recursoes: 118
+
+QuickSort Random Lomuto - Elementos: 1000 - Tempo: 0.0001020000 segundos - Trocas: 5425 - Recursoes: 1366
+QuickSort Mediana Lomuto - Elementos: 1000 - Tempo: 0.0001030000 segundos - Trocas: 5281 - Recursoes: 1260
+QuickSort Random Hoare - Elementos: 1000 - Tempo: 0.0001010000 segundos - Trocas: 4800 - Recursoes: 1362
+QuickSort Mediana Hoare - Elementos: 1000 - Tempo: 0.0000990000 segundos - Trocas: 4976 - Recursoes: 1254
+
+QuickSort Random Lomuto - Elementos: 10000 - Tempo: 0.0014270000 segundos - Trocas: 81502 - Recursoes: 13610
+QuickSort Mediana Lomuto - Elementos: 10000 - Tempo: 0.0013380000 segundos - Trocas: 73999 - Recursoes: 12498
+QuickSort Random Hoare - Elementos: 10000 - Tempo: 0.0012690000 segundos - Trocas: 63070 - Recursoes: 13552
+QuickSort Mediana Hoare - Elementos: 10000 - Tempo: 0.0012130000 segundos - Trocas: 65048 - Recursoes: 12516
+
+QuickSort Random Lomuto - Elementos: 100000 - Tempo: 0.0165500000 segundos - Trocas: 966785 - Recursoes: 135446
+QuickSort Mediana Lomuto - Elementos: 100000 - Tempo: 0.0159370000 segundos - Trocas: 828684 - Recursoes: 124520
+QuickSort Random Hoare - Elementos: 100000 - Tempo: 0.0151730000 segundos - Trocas: 790862 - Recursoes: 135438
+QuickSort Mediana Hoare - Elementos: 100000 - Tempo: 0.0150090000 segundos - Trocas: 798146 - Recursoes: 124518
+
+QuickSort Random Lomuto - Elementos: 1000000 - Tempo: 0.2031020000 segundos - Trocas: 13066112 - Recursoes: 1354980
+QuickSort Mediana Lomuto - Elementos: 1000000 - Tempo: 0.1883010000 segundos - Trocas: 10816258 - Recursoes: 1246934
+QuickSort Random Hoare - Elementos: 1000000 - Tempo: 0.1859530000 segundos - Trocas: 9453650 - Recursoes: 1354520
+QuickSort Mediana Hoare - Elementos: 1000000 - Tempo: 0.1721290000 segundos - Trocas: 9691864 - Recursoes: 1246582
+
