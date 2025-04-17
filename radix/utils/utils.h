@@ -16,6 +16,8 @@ void printAllStringMalloc(char **str, int length, char *stringText);
 void freeArrayStringMalloc(char **str, int length);
 void stringArrayMalloc(char **str);
 char** readWords(char *fileName, int* arrLength);
-char** filterUniqueWordsAndCountRepetition(char **str, int repetitions[], int arrLength, int *newArrLength);
+char** filterUniqueWordsAndCountRepetition(char **str, int repetitions[], int *repetitionsLength, int arrLength, int *newArrLength);
+void printArray(int* arr[], int length);
+void printfFormatted(char **strFiltered,int repetitions[], int strFilteredLength);
 
 #endif // UTILS_H_INCLUDED
