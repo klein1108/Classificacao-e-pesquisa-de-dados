@@ -12,12 +12,17 @@
 #define TRUE 1
 #define FALSE 0
 
+typedef struct {
+    char word[WORD_LENGTH];
+    int nTimes;
+} WordText;
+
 void printAllStringMalloc(char **str, int length, char *stringText);
 void freeArrayStringMalloc(char **str, int length);
 void stringArrayMalloc(char **str);
 char** readWords(char *fileName, int* arrLength);
-char** filterUniqueWordsAndCountRepetition(char **str, int repetitions[], int *repetitionsLength, int arrLength, int *newArrLength);
+WordText* filterUniqueWordsAndCountRepetition(char **words, int arrLength, int *newArrLength);
 void printArray(int* arr[], int length);
-void printfFormatted(char **strFiltered,int repetitions[], int strFilteredLength);
+void printfFormatted(WordText *strFiltered , int strFilteredLength);
 
 #endif // UTILS_H_INCLUDED

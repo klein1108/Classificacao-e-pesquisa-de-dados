@@ -62,47 +62,76 @@ char** readWords(char *fileName, int* arrLength) {
     return words;
 }
 
-char** filterUniqueWordsAndCountRepetition(char **str, int repetitions[], int *repetitionsLength, int arrLength, int *newArrLength) {
-    int aux = 0;
-    int capacidade = ARRAY_LENGTH;
-    char** words = malloc(capacidade * sizeof(char*));
+WordText* filterUniqueWordsAndCountRepetition(char **words, int arrLength, int *newArrLength) {
+   WordText *result = malloc(arrLength * sizeof(WordText)); // aloca o máximo possível
+    int count = 0;
 
     for (int i = 0; i < arrLength; i++) {
-        int repetida = FALSE;
+        int found = 0;
 
-        for (int j = 0; j < aux; j++) {
-
-            if (strcmp(str[i], words[j]) == 0) {
-                repetida = TRUE;
-                if(repetitions[j] == 0){
-                    (*repetitionsLength)++;
-                    repetitions[j] = 1;         //ajuste q os valores comecam em 0 e ele deve ter aparecido pelo menos uma vez para repetir
-                }
-                repetitions[j]++;
-
+        for (int j = 0; j < count; j++) {
+            if (strcmp(result[j].word, words[i]) == 0) {
+                result[j].nTimes++;
+                found = 1;
                 break;
             }
         }
 
-        if (!repetida) {
-            if (aux >= capacidade) {
-                capacidade *= 2;
-                words = realloc(words, capacidade * sizeof(char*));
-            }
-
-            words[aux] = malloc(strlen(str[i]) + 1);
-            strcpy(words[aux], str[i]);
-
-            aux++;
+        if (!found) {
+            strncpy(result[count].word, words[i], WORD_LENGTH - 1);
+            result[count].word[WORD_LENGTH - 1] = '\0'; // segurança
+            result[count].nTimes = 1;
+            count++;
         }
     }
 
-    *newArrLength = aux;
-    return words;
+    *newArrLength = count;
+    return result;
 }
 
-void printfFormatted(char **strFiltered,int repetitions[], int strFilteredLength){
+//char** filterUniqueWordsAndCountRepetition(char **str, int repetitions[], int *repetitionsLength, int arrLength, int *newArrLength) {
+//    int aux = 0;
+//    int capacidade = ARRAY_LENGTH;
+//    char** words = malloc(capacidade * sizeof(char*));
+//
+//    for (int i = 0; i < arrLength; i++) {
+//        int repetida = FALSE;
+//
+//        for (int j = 0; j < aux; j++) {
+//
+//            if (strcmp(str[i], words[j]) == 0) {
+//                repetida = TRUE;
+//                if(repetitions[j] == 0){
+//                    (*repetitionsLength)++;
+//                    repetitions[j] = 1;         //ajuste q os valores comecam em 0 e ele deve ter aparecido pelo menos uma vez para repetir
+//                }
+//                repetitions[j]++;
+//
+//                break;
+//            }
+//        }
+//
+//        if (!repetida) {
+//            if (aux >= capacidade) {
+//                capacidade *= 2;
+//                words = realloc(words, capacidade * sizeof(char*));
+//            }
+//
+//            words[aux] = malloc(strlen(str[i]) + 1);
+//            strcpy(words[aux], str[i]);
+//
+//            aux++;
+//        }
+//    }
+//
+//    *newArrLength = aux;
+//    return words;
+//}
+
+void printfFormatted(WordText *strFiltered , int strFilteredLength){
     for(int i = 0; i < strFilteredLength; i++){
-        printf("- %s repetiu %d vezes\n", strFiltered[i], repetitions[i]);
+        printf("%d - %s apareceu %d vezes \n",i+1, strFiltered[i].word, strFiltered[i].nTimes);
     }
 }
+
+
