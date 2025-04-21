@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="radix" />
+		<Option title="Radix" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/radix" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/RadixSortMSD" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/radix" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/RadixSortMSD" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -34,12 +34,14 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="radix/radix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="radix/radix.h" />
 		<Unit filename="utils/utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="utils/utils.h" />
-		<Extensions>
-			<lib_finder disable_auto="1" />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

@@ -5,24 +5,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define WORD_LENGTH 10
-#define ARRAY_LENGTH 100000
-#define BUFFER_SIZE 1024
-
-#define TRUE 1
-#define FALSE 0
+#define MAX_WORDS 600000
+#define MAX_CHAR 4000000
+#define HUNDRED 100
 
 typedef struct {
-    char word[WORD_LENGTH];
-    int nTimes;
-} WordText;
+    char word[100];
+    int wordCount;
+} WordNode;
 
-void printAllStringMalloc(char **str, int length, char *stringText);
-void freeArrayStringMalloc(char **str, int length);
-void stringArrayMalloc(char **str);
-char** readWords(char *fileName, int* arrLength);
-WordText* filterUniqueWordsAndCountRepetition(char **words, int arrLength, int *newArrLength);
-void printArray(int* arr[], int length);
-void printfFormatted(WordText *strFiltered , int strFilteredLength);
+int comparingRanking(const void* a, const void* b);
+char* mergingName(char* merged, char* prefix, char* suffix);
+void countingWords(const char* fileName, char** words, int nWords);
+void readingFile(const char* fileName, char** words, int* nWords);
+void writingFile(const char* fileName, char** words, int nWords);
+void rankingGenerator(const char* fileDataName, const char* nomeSaida);
 
 #endif // UTILS_H_INCLUDED

@@ -1,7 +1,6 @@
 ## Codeblocks ##
 bin/
 obj/
-entradas/
 
 *.layout
 *.depend
