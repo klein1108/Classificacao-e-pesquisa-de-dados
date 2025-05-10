@@ -31,6 +31,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/utils.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

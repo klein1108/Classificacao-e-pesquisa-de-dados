@@ -8,8 +8,9 @@
 #define TRUE 1
 #define FALSE 0
 
-#define M 18944
-#define MAX_LENGTH 100
+#define M1 3793
+#define MAX_LENGTH 256
+#define END_LINE '\0'
 
 typedef struct typePlayerHash{
     int sofifaId;
@@ -19,10 +20,13 @@ typedef struct typePlayerHash{
 } PlayerHash;
 
 
+PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerHash *players[], int arrSize);
+
 void destroyHashLine(PlayerHash *firstElement, int index);
 void printHashTable(int arrSize, PlayerHash *players[]);
-void insertPlayerInHashTableById(PlayerHash *players[], PlayerHash *newPlayer);
+void insertPlayerInHashTableById(PlayerHash *players[], PlayerHash *newPlayer, int arrSize);
 void destroyHashtablesLists(int arrSize, PlayerHash *players[]);
+
 
 
 #endif // UTILS_H_INCLUDED
