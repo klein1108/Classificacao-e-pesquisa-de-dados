@@ -1,8 +1,22 @@
 #include "utils.h"
 
+void readAllQueriesIdFromCSV(const char *filename, int arr[]){
+    FILE* file = fopen(filename, "r");
+    int i = 0;
+    if (!file) {
+        printf("Error openning the file %s\n", filename);
+        return;
+    } else {
+        char line[MAX_LENGTH];
+        while(fgets(line, sizeof(line), file)){
+            arr[i] = atoi(line);
+            i++;
+        }
+    }
+}
+
 PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerHash *players[], int arrSize){
     FILE* file = fopen(filename, "r");
-
 
     if (!file) {
         printf("Error openning the file %s\n", filename);
@@ -24,6 +38,7 @@ PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerH
             char *aux = strtok(line, ",");
             if(!aux){
                 printf("ERROR: While getting id\n");
+                free(newPlayer);
                 return;
             } else {
                 newPlayer->sofifaId = atoi(aux);
@@ -33,6 +48,7 @@ PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerH
             aux = strtok(NULL, ",");
             if (!aux){
                 printf("ERROR: While getting name\n");
+                free(newPlayer);
                 return;
             } else {
                 char newName[MAX_LENGTH];
@@ -45,6 +61,7 @@ PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerH
             aux = strtok(NULL, "\n");
              if (!aux){
                 printf("ERROR: While getting positions\n");
+                free(newPlayer);
                 return;
             } else {
                 char position[MAX_LENGTH];
@@ -57,10 +74,83 @@ PlayerHash* readPlayersFromCSVAndInsertInHashTable(const char *filename, PlayerH
 
         }
         fclose(file);
-        printf("HASH TABLE %d LENGTH -> Total players added: %d\n", arrSize, count);
+        printf("HASH TABLE LENGTH %d -> Total players added: %d\n", arrSize, count);
 
     }
 
+}
+
+void writeFormattedSingularResultInFile(FILE *file, void *arr, int arrSize, char type) {
+    for (int i = 0; i < arrSize; i++) {
+        switch(type){
+            case 'f':
+                fprintf(file, "%.2f", ((float *)arr)[i]);
+                break;
+            case 'i':
+                fprintf(file, "%d", ((int *)arr)[i]);
+                break;
+        }
+
+        if (i < arrSize - 1){
+            fprintf(file, ",");
+        }
+    }
+    fprintf(file, "\n");
+}
+
+void writeSingularResultsinFile(const char *fileName,
+                      float allTimes[],
+                      float allOccupancyRate[],
+                      int allGreatestList[],
+                      float allAverageSize[]) {
+
+    FILE *file = fopen(fileName, "w");
+    if (!file) {
+        perror("Error while opening the file");
+        return;
+    }
+
+    writeFormattedSingularResultInFile(file, allTimes, CINCO, 'f');
+    writeFormattedSingularResultInFile(file, allOccupancyRate, CINCO, 'f');
+    writeFormattedSingularResultInFile(file, allGreatestList, CINCO, 'i');
+    writeFormattedSingularResultInFile(file, allAverageSize, CINCO, 'f');
+
+    fclose(file);
+}
+
+void writeFormattedPlayerInFile(const char *fileName, PlayerHash *player, int testsPerformed[]) {
+    FILE *file = fopen(fileName, "a");
+    if (!file) {
+        perror("Error while opening the file");
+        return;
+    }
+
+    int id;
+    char name[MAX_LENGTH];
+    char pos[MAX_LENGTH];
+
+    if (player == NULL) {
+        id = NOT_FOUND_ID;
+        strcpy(name, NOT_FOUND_NAME);
+        strcpy(pos, NOT_FOUND_NAME);
+    } else {
+        id = player->sofifaId;
+        strcpy(name, player->name);
+        strcpy(pos, player->playerPosition);
+    }
+
+
+    fprintf(file, "%d,%s,%s,", id, name , pos);
+
+    int testsPerformedLength = sizeof(testsPerformed)/sizeof(int);
+    for(int i = 0; i < testsPerformedLength; i++){
+        if(i == testsPerformedLength - 1){
+            fprintf(file, "%d\n", testsPerformed[i]);
+        } else {
+            fprintf(file, "%d,", testsPerformed[i]);
+        }
+    }
+    fclose(file);
 }
 
 /// Trocar para a pasta Hash -> Hash.h  -> Hash.c
@@ -107,6 +197,77 @@ void insertPlayerInHashTableById(PlayerHash *players[], PlayerHash *newPlayer, i
     }
 }
 
+PlayerHash* searchPlayerInHashTableById(int arrSize, int playerId, PlayerHash *players[], int *testsPerformeds){
+    int module = (int) playerId % arrSize;
+    PlayerHash *current = players[module];
+
+    while(current != NULL){
+        (*testsPerformeds)++;
+
+        if(current->sofifaId == playerId){
+            return current;
+        } else {
+            current = current->next;
+        }
+    }
+
+    return NULL;
+}
+
+int getTheGreatestHashTableListSize(int arrSize, PlayerHash *players[]){
+    int greaterListSize = 0;
+    int count = 0;
+
+    for(int i = 0; i < arrSize; i++){
+        PlayerHash *aux = players[i];
+        while(aux != NULL){
+            count++;
+            aux = aux->next;
+        }
+
+        if(count > greaterListSize){
+            greaterListSize = count;
+        }
+
+        count = 0;
+    }
+
+    return greaterListSize;
+}
+
+float getTheAverageHashTableListSize(int arrSize, PlayerHash *player[]){
+    float averageSize = 0;
+    int occupiedKeysCount = 0;
+    int allListSizeCount = 0;
+
+    for(int i = 0; i < arrSize; i++){
+        PlayerHash *aux = player[i];
+        if(aux != NULL){
+            occupiedKeysCount++;
+        }
+
+        while(aux != NULL){
+            allListSizeCount++;
+            aux = aux->next;
+        }
+    }
+    averageSize = (float) allListSizeCount / occupiedKeysCount;
+    return averageSize;
+}
+
+float countHashTableOccupancyRate(int arrSize, PlayerHash *players[]){
+    int usedKeys = 0;
+    float occupancyRate;
+    for(int i = 0; i < arrSize; i++){
+        if(players[i] != NULL){
+            usedKeys++;
+        }
+    }
+
+    occupancyRate = (float)usedKeys/arrSize;
+    return occupancyRate;
+}
+
 void destroyHashtablesLists(int arrSize, PlayerHash *players[]){
     int count = 0;
     for (int i = 0; i < arrSize; i++) {
@@ -119,7 +280,7 @@ void destroyHashtablesLists(int arrSize, PlayerHash *players[]){
             count++;
         }
     }
-    printf("HASH TABLE %d LENGTH -> Total players removed: %d\n", arrSize, count);
+    printf("HASH TABLE LENGTH: %d -> Total players removed: %d\n\n", arrSize, count);
 }
 
 
