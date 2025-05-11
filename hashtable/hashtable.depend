@@ -1,13 +1,13 @@
 # depslib dependency file v1.0
-1746920718 source:f:\ufrgs\aulas\semestre 3\cpd\hashtable\utils\utils.c
+1746989651 source:f:\ufrgs\aulas\semestre 3\cpd\hashtable\utils\utils.c
 	"utils.h"
 
-1746920765 f:\ufrgs\aulas\semestre 3\cpd\hashtable\utils\utils.h
+1746989139 f:\ufrgs\aulas\semestre 3\cpd\hashtable\utils\utils.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1746920691 source:f:\ufrgs\aulas\semestre 3\cpd\hashtable\main.c
+1746988990 source:f:\ufrgs\aulas\semestre 3\cpd\hashtable\main.c
 	<time.h>
 	"utils/utils.h"
 

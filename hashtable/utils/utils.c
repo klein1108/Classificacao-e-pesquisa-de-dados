@@ -118,38 +118,36 @@ void writeSingularResultsinFile(const char *fileName,
     fclose(file);
 }
 
-void writeFormattedPlayerInFile(const char *fileName, PlayerHash *player, int testsPerformed[]) {
-    FILE *file = fopen(fileName, "a");
+void writeFormattedPlayerInFile(const char *fileName, PlayerHash allPlayers[], int arrSize, int testsPerformed[CINCO][M], double times[], int testArrLength) {
+    FILE *file = fopen(fileName, "w");
     if (!file) {
         perror("Error while opening the file");
         return;
     }
 
-    int id;
-    char name[MAX_LENGTH];
-    char pos[MAX_LENGTH];
-
-    if (player == NULL) {
-        id = NOT_FOUND_ID;
-        strcpy(name, NOT_FOUND_NAME);
-        strcpy(pos, NOT_FOUND_NAME);
-    } else {
-        id = player->sofifaId;
-        strcpy(name, player->name);
-        strcpy(pos, player->playerPosition);
-    }
-
-
-    fprintf(file, "%d,%s,%s,", id, name , pos);
-
-    int testsPerformedLength = sizeof(testsPerformed)/sizeof(int);
-    for(int i = 0; i < testsPerformedLength; i++){
-        if(i == testsPerformedLength - 1){
-            fprintf(file, "%d\n", testsPerformed[i]);
+    for(int i = 0; i < testArrLength; i++){
+        if(i == testArrLength - 1){
+            fprintf(file, "%.2lf\n", times[i]);
         } else {
-            fprintf(file, "%d,", testsPerformed[i]);
+            fprintf(file, "%.2lf,", times[i]);
         }
     }
+
+    for(int i = 0; i < arrSize; i++){
+        fprintf(file, "%d,%s,", allPlayers[i].sofifaId, allPlayers[i].name);
+
+
+        for(int j = 0; j < testArrLength; j++){
+            if(j == testArrLength - 1){
+                fprintf(file, "%d\n", testsPerformed[j][i]);
+
+            } else {
+                fprintf(file, "%d,", testsPerformed[j][i]);
+
+            }
+        }
+    }
+
     fclose(file);
 }
 
@@ -282,5 +280,6 @@ void destroyHashtablesLists(int arrSize, PlayerHash *players[]){
     }
     printf("HASH TABLE LENGTH: %d -> Total players removed: %d\n\n", arrSize, count);
 }
+
 
 

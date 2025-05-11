@@ -8,7 +8,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define M 18948
+#define M 18949
 #define CINCO 5
 #define MAX_LENGTH 256
 #define END_LINE '\0'
@@ -32,7 +32,7 @@ void writeSingularResultsinFile(const char *fileName,
                       float allOccupancyRate[],
                       int allGreatestList[],
                       float allAverageSize[]);
-void writeFormattedPlayerInFile(const char *fileName, PlayerHash *player, int testsPerformed[]);
+void writeFormattedPlayerInFile(const char *fileName, PlayerHash allPlayers[], int arrSize, int testsPerformed[CINCO][M], double times[], int testArrLength);
 void readAllQueriesIdFromCSV(const char *filename, int arr[]);
 
 void destroyHashLine(PlayerHash *firstElement, int index);
